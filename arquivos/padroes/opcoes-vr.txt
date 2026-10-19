@@ -1,0 +1,4 @@
+giro=40
+mira=2.5
+imagem=0
+braco=63.0
