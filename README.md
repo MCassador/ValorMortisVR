@@ -2,7 +2,7 @@
 
 Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços do personagem seguindo os seus controles. É um mod de fã, feito sobre o [UEVR](https://github.com/praydog/UEVR) (praydog, licença MIT). **Não é oficial e este repositório não contém o jogo.**
 
-> Versão 0.1, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)).
+> Versão 0.2, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)).
 
 ## O que o mod faz
 
@@ -12,6 +12,21 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 - **Granada na cintura**, frasco de cura e trava de mira no inimigo.
 - **Câmera:** ajustada nos golpes especiais e finalizações; nas cenas do jogo o mod sai da frente e mostra a câmera original.
 - **Corpo e braços:** os dois braços acompanham os controles, e o empurrão do golpe vira reação do inimigo.
+- **Aba VR no menu do jogo:** em *Opções* há uma aba **VR** para ligar/desligar vida e balas infinitas, trocar o giro do analógico, ajustar a ajuda da mira e soltar o personagem se ele ficar preso.
+
+## Novidades da 0.2
+
+- Aba **VR** nas Opções do jogo.
+- Espada acerta melhor inimigos grandes, chefes e criaturas; não dá mais golpe sozinha (só com o braço balançando).
+- Espadas novas (florete) certas na mão.
+- Poderes da mão esquerda (gelo e fogo) presos na mão e no braço.
+- Pistola com o frasco vermelho de volta.
+- Roleta de armas só pelo analógico e mais firme.
+- Escadas não derrubam mais o personagem.
+- Câmera mais estável (menos tremida quando o jogo fica pesado).
+- Braços no tamanho certo (fixo).
+- Vida e balas infinitas (ligadas por padrão; desligue na aba VR).
+- Desprender o personagem preso ou embaixo do mapa (aba VR ou tecla **5**).
 
 ## Requisitos
 
@@ -24,7 +39,7 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 
 ## Instalação
 
-1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.1.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
+1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.2.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
 2. **Feche o Valor Mortis.**
 3. Dê dois cliques em **`instalar.bat`**.
    - Ele procura o jogo sozinho nas suas bibliotecas da Steam.
@@ -67,14 +82,13 @@ Mapa atual (pode mudar entre versões):
 
 ## Ajustes
 
-Ficam em `ValorMortisVR\dados\UnrealVRMod\ValorMortis-Win64-Shipping\plugins\opcoes-vr.txt`:
+O jeito mais fácil é a aba **VR** em *Opções* (no menu de pausa). Os valores ficam salvos em `ValorMortisVR\dados\UnrealVRMod\ValorMortis-Win64-Shipping\plugins\opcoes-vr.txt`:
 
 | Linha | O que muda |
 |---|---|
 | `giro=40` | ângulo de cada passo do giro da vista (30, 40 ou 45 graus). No jogo: clique os **dois analógicos juntos** para trocar |
 | `mira=2.5` | cone da assistência de mira da pistola, em graus (0 desliga). No teclado: tecla **8** troca 2,5, 4 e desligada |
-| `imagem=0` | modo de imagem: 0 = original do jogo, 1 = VR limpo (sem desfoque, aberração e granulado), 2 = limpo e sem o brilho espalhado. No teclado: tecla **9** troca |
-| `braco=63.0` | comprimento do braço em cm (o mod mede sozinho com o uso) |
+| `vida=1` | vida e balas infinitas (1 liga, 0 desliga). No teclado: tecla **0** |
 
 O menu do UEVR abre com a tecla **Insert** (no teclado do PC).
 
@@ -87,7 +101,7 @@ O menu do UEVR abre com a tecla **Insert** (no teclado do PC).
 
 ## Limitações
 
-Ainda não foram bem testados no jogo: quebrar caixotes e barris com o movimento da espada, bater em chefes muito grandes pelo movimento (o golpe pelo grip funciona), e a posição do frasco de cura na mão. Nada disso trava o jogo; só pode não funcionar como esperado.
+Ainda em ajuste: golpes de espada em alguns chefes e criaturas novos, e o frasco vermelho da pistola com a aparência DLC. Se o personagem ficar preso depois de uma viagem rápida, use *Desprender* na aba VR (ou a tecla **5**) e salve o jogo num lugar normal. Nada disso trava o jogo.
 
 ## O que é instalado
 
