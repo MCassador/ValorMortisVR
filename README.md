@@ -2,7 +2,7 @@
 
 Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços do personagem seguindo os seus controles. É um mod de fã, feito sobre o [UEVR](https://github.com/praydog/UEVR) (praydog, licença MIT). **Não é oficial e este repositório não contém o jogo.**
 
-> Versão 0.3, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
+> Versão 0.3.1, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
 
 ## O que o mod faz
 
@@ -13,6 +13,13 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 - **Câmera:** ajustada nos golpes especiais e finalizações; nas cenas do jogo o mod sai da frente e mostra a câmera original.
 - **Corpo e braços:** os dois braços acompanham os controles, e o empurrão do golpe vira reação do inimigo.
 - **Aba VR no menu do jogo:** em *Opções* há uma aba **VR** para ligar/desligar vida e balas infinitas, trocar o giro do analógico, ajustar a ajuda da mira e soltar o personagem se ele ficar preso.
+
+## Novidades da 0.3.1
+
+- **Granada (BETA):** a mira sai da palma da mão esquerda, aparece em qualquer superfície (água, paredes, céu) e fica enquanto o grip estiver segurado, mesmo levantando a mão.
+- **Pegar rápido** não cancela mais o arremesso (antes ficava só a bolinha branca na mão).
+- **Bolsos da cintura** mostram o modelo de cada item (granada, frasco); a busca acontece na primeira pausa dentro da fase.
+- Com a **pistola** na mão esquerda a cintura fica desligada (o grip é a mira da pistola).
 
 ## Novidades da 0.3
 
@@ -56,7 +63,7 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 
 ## Instalação
 
-1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.3.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
+1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.3.1.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
 2. **Feche o Valor Mortis.**
 3. Dê dois cliques em **`instalar.bat`**.
    - Ele procura o jogo sozinho nas bibliotecas da Steam e na pasta do app Xbox (Game Pass).
@@ -157,6 +164,13 @@ ValorMortisVR\
 
 **Valor Mortis VR** lets you play *Valor Mortis* in virtual reality, in first person, with the character's arms following your controllers. Fan-made mod built on [UEVR](https://github.com/praydog/UEVR) (praydog, MIT). Not official; this repository does not contain the game.
 
+### What's new in 0.3.1
+
+- **Grenade (BETA):** the aim comes out of the left palm, shows on any surface (water, walls, sky) and stays while you hold the grip, even with your hand raised.
+- **Quick grabs** no longer cancel the throw (before, only the white ball stayed in the hand).
+- **Belt pouches** show each item's model (grenade, flask); they are looked up the first time you pause inside a level.
+- With the **pistol** in the left hand the belt is disabled (the grip aims the pistol).
+
 ### What's new in 0.3
 
 - **Works with the October 21 game update** (0.2 no longer starts VR after it).
@@ -176,7 +190,7 @@ ValorMortisVR\
 
 ### Install
 
-1. Download `ValorMortisVR-v0.3.zip` from **[Releases](../../releases)** and extract the whole folder.
+1. Download `ValorMortisVR-v0.3.1.zip` from **[Releases](../../releases)** and extract the whole folder.
 2. Close Valor Mortis.
 3. Double-click **`instalar.bat`**. It finds the game in your Steam libraries and in the Xbox app folder (Game Pass); if not, paste the folder that contains the game executable (Steam: `...\ValorMortis\Binaries\Win64`).
 4. Start your OpenXR runtime (SteamVR, Meta/Oculus, Virtual Desktop…) and launch the game. VR turns on by itself about 40 seconds later.
