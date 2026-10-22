@@ -6,6 +6,11 @@ $exeName = 'ValorMortis-Win64-Shipping.exe'
 function Fail($msg) { Write-Host ''; Write-Host $msg -ForegroundColor Red; exit 1 }
 
 $bin = $GameBin.Trim('"')
+# onde o instalador gravou (Steam ou Game Pass)
+$state = Join-Path $env:LOCALAPPDATA 'ValorMortisVR\pasta-do-jogo.txt'
+if (-not $bin -and (Test-Path $state)) { $bin = (Get-Content $state -Raw).Trim() }
+if ($bin -and -not (Test-Path (Join-Path $bin 'ValorMortisVR'))) { $bin = '' }
+if ($bin) { $found = Get-ChildItem -Path $bin -Filter 'ValorMortis*-Shipping.exe' -File -ErrorAction SilentlyContinue | Select-Object -First 1; if ($found) { $exeName = $found.Name } }
 if (-not $bin) {
     $steam = (Get-ItemProperty 'HKCU:\Software\Valve\Steam' -ErrorAction SilentlyContinue).SteamPath
     $libs = @()
@@ -27,7 +32,7 @@ if (-not $bin -or -not (Test-Path (Join-Path $bin $exeName))) {
     $bin = (Read-Host 'Pasta').Trim('"')
     if (-not (Test-Path (Join-Path $bin $exeName))) { Fail "Nao achei $exeName nessa pasta." }
 }
-if (Get-Process -Name 'ValorMortis-Win64-Shipping' -ErrorAction SilentlyContinue) { Fail 'Feche o Valor Mortis antes.' }
+if (Get-Process -Name ([IO.Path]::GetFileNameWithoutExtension($exeName)) -ErrorAction SilentlyContinue) { Fail 'Feche o Valor Mortis antes.' }
 
 Write-Host "Vai apagar version.dll e a pasta ValorMortisVR (com os seus ajustes) de: $bin"
 if (-not $Sim) {
