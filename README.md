@@ -2,7 +2,7 @@
 
 Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços do personagem seguindo os seus controles. É um mod de fã, feito sobre o [UEVR](https://github.com/praydog/UEVR) (praydog, licença MIT). **Não é oficial e este repositório não contém o jogo.**
 
-> Versão 0.2, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)).
+> Versão 0.3, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
 
 ## O que o mod faz
 
@@ -13,6 +13,23 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 - **Câmera:** ajustada nos golpes especiais e finalizações; nas cenas do jogo o mod sai da frente e mostra a câmera original.
 - **Corpo e braços:** os dois braços acompanham os controles, e o empurrão do golpe vira reação do inimigo.
 - **Aba VR no menu do jogo:** em *Opções* há uma aba **VR** para ligar/desligar vida e balas infinitas, trocar o giro do analógico, ajustar a ajuda da mira e soltar o personagem se ele ficar preso.
+
+## Novidades da 0.3
+
+- **Funciona com a atualização do jogo de 21/10** (a 0.2 não liga o VR depois dela).
+- **Detecção automática:** se o jogo atualizar de novo, o mod procura sozinho o que precisa, sem esperar uma versão nova.
+- **Xbox Game Pass (experimental):** o instalador acha o jogo também na pasta do app Xbox.
+- **`coletar-logs.bat`:** junta os registros num ZIP na Área de Trabalho para mandar se algo der errado; o instalador grava `relatorio-instalacao.txt`.
+- **Mosquete (arma de duas mãos):** segure com as duas mãos (grip esquerdo no cano), mira pelo cano, gatilho direito atira sem virar coronhada, com uma mão fica inclinado para baixo; troca de arma sem a mão voar. O mesmo vale para outras armas longas.
+- **Mira com ponto branco** no mosquete e na pistola, e marca no lugar do impacto do tiro.
+- **Golpes com peso:** a mão para no inimigo, vibração dupla forte e uma micro-pausa no acerto. Armas longas não dão mais golpe de espada.
+- **Itens na cintura:** 3 bolsos para as vagas de item 1, 2 e 3 (pegue com o grip esquerdo); X esquerdo segurado abre o inventário.
+- **Granadas (BETA):** pegue na cintura, a bomba fica na palma, uma linha mostra o arco e onde vai cair (aponte com o controle esquerdo), solte o grip para jogar. Granadas infinitas na aba VR (BETA).
+- **Cenas em primeira pessoa:** os olhos vão para o rosto do personagem.
+- **Giro do analógico:** o corpo gira junto (braços não ficam tortos).
+- **Parkour:** corrida na parede, poste e gancho pegam melhor; no ar, o analógico segue a direção do salto, não a cabeça.
+- **Imagem:** sem bloom (o brilho espalhado), sem reflexos do Lumen (menos pontinhos brilhantes, mais FPS) e sem efeitos de câmera (desfoque, reflexo de lente, aberração de cor, granulado, borrão).
+- **Correções:** fechamento do jogo ao pegar granada; teclas de teste do teclado (F2–F12) só com Ctrl (um esbarrão no F8 congelava os braços); aba VR com os textos certos.
 
 ## Novidades da 0.2
 
@@ -32,19 +49,23 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 
 | Item | Detalhe |
 |---|---|
-| Jogo | Valor Mortis (Steam), Windows |
+| Jogo | Valor Mortis (Steam; Xbox Game Pass em teste), Windows |
 | Headset | qualquer um com runtime **OpenXR** (SteamVR, Meta/Oculus, Virtual Desktop, etc.) |
 | Placa de vídeo | o jogo é pesado; em VR use resolução moderada no seu runtime |
 | Windows | PowerShell 5.1 (já vem no Windows 10 e 11) |
 
 ## Instalação
 
-1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.2.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
+1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.3.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
 2. **Feche o Valor Mortis.**
 3. Dê dois cliques em **`instalar.bat`**.
-   - Ele procura o jogo sozinho nas suas bibliotecas da Steam.
-   - Se não achar, ele pede a pasta `...\Valor Mortis\ValorMortis\Binaries\Win64`; cole o caminho e aperte Enter.
-4. Ligue o headset e abra o jogo **pela Steam**. O VR liga sozinho junto com o jogo; não precisa de injetor.
+   - Ele procura o jogo sozinho nas bibliotecas da Steam e na pasta do app Xbox (Game Pass).
+   - Se não achar, ele pede a pasta do executável do jogo (`...\ValorMortis\Binaries\Win64` na Steam); cole o caminho e aperte Enter.
+4. Ligue o headset e abra o jogo (pela Steam ou pelo app Xbox). O VR liga sozinho uns 40 segundos depois; não precisa de injetor.
+
+### Xbox Game Pass (experimental)
+
+No app Xbox, deixe a pasta do jogo acessível para mods (opções do Valor Mortis > gerenciar > gerenciamento avançado / permitir mods) e rode o `instalar.bat`. O executável do Game Pass é diferente do da Steam; o mod procura sozinho o que precisa ao abrir o jogo. Se não funcionar, rode `coletar-logs.bat` e mande o ZIP.
 
 Se ainda não usou o OpenXR com outro jogo, defina primeiro o seu runtime como o OpenXR ativo (no SteamVR, Meta ou Virtual Desktop).
 
@@ -68,14 +89,16 @@ Mapa atual (pode mudar entre versões):
 
 | Controle | Ação |
 |---|---|
-| Mão direita | espada |
+| Mão direita | espada (ou mosquete) |
 | Mão esquerda | pistola (gatilho esquerdo atira) |
-| Grip esquerdo | mirar com a pistola |
+| Grip esquerdo | mirar com a pistola; com o mosquete, segurar o cano com as duas mãos |
+| Gatilho direito (mosquete) | mirar e atirar |
+| Grip esquerdo na cintura | pegar o item do bolso (granada: segure, aponte e solte para jogar) |
 | Grip direito | esquiva |
 | Analógico direito para cima / baixo | pular / agachar |
 | A direito | recarregar |
 | B direito | interagir |
-| X esquerdo | curar (frasco) |
+| X esquerdo | curar (frasco); segurado abre o inventário |
 | X + Y esquerdos | inventário |
 | ☰ esquerdo | pausa; segurado por 0,5 s abre o inventário |
 | Analógico direito para os lados | giro da vista em passos |
@@ -89,6 +112,11 @@ O jeito mais fácil é a aba **VR** em *Opções* (no menu de pausa). Os valores
 | `giro=40` | ângulo de cada passo do giro da vista (30, 40 ou 45 graus). No jogo: clique os **dois analógicos juntos** para trocar |
 | `mira=2.5` | cone da assistência de mira da pistola, em graus (0 desliga). No teclado: tecla **8** troca 2,5, 4 e desligada |
 | `vida=1` | vida e balas infinitas (1 liga, 0 desliga). No teclado: tecla **0** |
+| `granadas=0` | granadas infinitas (BETA; 1 liga). Também na aba VR |
+| `img_reflexos=0` | reflexos do Lumen (0 = desligados, mais leve; 1 = como o jogo) |
+| `img_posfx=1` | 1 = sem desfoque, reflexo de lente, aberração de cor, granulado e borrão (melhor no VR) |
+
+No Game Pass a pasta `ValorMortis-Win64-Shipping` tem o nome do executável do Game Pass.
 
 O menu do UEVR abre com a tecla **Insert** (no teclado do PC).
 
@@ -97,11 +125,11 @@ O menu do UEVR abre com a tecla **Insert** (no teclado do PC).
 - **O antivírus reclama do `version.dll`:** ele é o carregador do mod (liga o VR junto com o jogo). Libere a pasta do jogo e rode o instalador de novo. Se a cópia falhar, o instalador avisa.
 - **O jogo não abre ou fecha sozinho:** rode `desinstalar.bat`, confirme que o jogo abre normal e instale de novo. Se voltar a acontecer, mande o registro (abaixo).
 - **Imagem preta ou nenhum VR:** confira se o runtime OpenXR está ligado e ativo antes de abrir o jogo.
-- **Registro do mod:** `ValorMortisVR\dados\UnrealVRMod\ValorMortis-Win64-Shipping\plugins\vmvr.log`. Anexe esse arquivo ao abrir uma issue.
+- **Registros:** feche o jogo e rode **`coletar-logs.bat`** (na pasta do instalador). Ele cria `ValorMortisVR-logs-....zip` na Área de Trabalho; anexe esse arquivo ao abrir uma issue.
 
 ## Limitações
 
-Ainda em ajuste: golpes de espada em alguns chefes e criaturas novos, e o frasco vermelho da pistola com a aparência DLC. Se o personagem ficar preso depois de uma viagem rápida, use *Desprender* na aba VR (ou a tecla **5**) e salve o jogo num lugar normal. Nada disso trava o jogo.
+Ainda em ajuste: **granadas (BETA)**, alguns obstáculos de parkour, ícones dos itens nos bolsos da cintura, golpes de espada em alguns chefes e criaturas novos, e o suporte ao **Game Pass** (experimental). Se o personagem ficar preso depois de uma viagem rápida, use *Desprender* na aba VR (ou a tecla **5**) e salve o jogo num lugar normal. Nada disso trava o jogo.
 
 ## O que é instalado
 
@@ -122,3 +150,43 @@ ValorMortisVR\
 - [UEVR](https://github.com/praydog/UEVR), por praydog e colaboradores (MIT).
 - OpenXR loader, Khronos Group.
 - Mod por MCassador.
+
+---
+
+## English
+
+**Valor Mortis VR** lets you play *Valor Mortis* in virtual reality, in first person, with the character's arms following your controllers. Fan-made mod built on [UEVR](https://github.com/praydog/UEVR) (praydog, MIT). Not official; this repository does not contain the game.
+
+### What's new in 0.3
+
+- **Works with the October 21 game update** (0.2 no longer starts VR after it).
+- **Automatic detection:** if the game updates again, the mod looks up what it needs by itself.
+- **Xbox Game Pass (experimental):** the installer also finds the game in the Xbox app folder.
+- **`coletar-logs.bat`:** collects all logs into a ZIP on your Desktop to send if something goes wrong; the installer writes `relatorio-instalacao.txt`.
+- **Musket (two-handed weapon):** hold it with both hands (left grip on the barrel), aim down the barrel, right trigger fires (no accidental bayonet bash), lowered when held with one hand; no flying hand on weapon swap. Same for other long guns.
+- **White aim dot** on the musket and the pistol, plus a marker where the shot lands.
+- **Weightier melee:** your hand stops on the enemy, strong double vibration and a short hit-pause. Long guns no longer count as blades.
+- **Belt items:** 3 belt pouches for item slots 1, 2 and 3 (grab with the left grip); hold left X to open the inventory.
+- **Grenades (BETA):** grab one from your belt, it sits in your palm, an arc shows the trajectory and landing spot (point with the left controller), release the grip to throw. Infinite grenades option in the VR tab (BETA).
+- **First-person cutscenes:** your eyes go to the character's face.
+- **Snap turn:** the body turns with it (arms no longer twisted).
+- **Parkour:** wall run, poles and grappling hook catch better; in the air, the stick follows the jump direction, not your head.
+- **Image:** no bloom, no Lumen reflections (fewer sparkles, more FPS) and no camera effects (depth of field, lens flare, chromatic aberration, film grain, motion blur).
+- **Fixes:** crash when grabbing a grenade; keyboard test keys (F2–F12) now need Ctrl (an accidental F8 froze the arms); VR tab labels.
+
+### Install
+
+1. Download `ValorMortisVR-v0.3.zip` from **[Releases](../../releases)** and extract the whole folder.
+2. Close Valor Mortis.
+3. Double-click **`instalar.bat`**. It finds the game in your Steam libraries and in the Xbox app folder (Game Pass); if not, paste the folder that contains the game executable (Steam: `...\ValorMortis\Binaries\Win64`).
+4. Start your OpenXR runtime (SteamVR, Meta/Oculus, Virtual Desktop…) and launch the game. VR turns on by itself about 40 seconds later.
+
+**Game Pass (experimental):** in the Xbox app, make the game folder accessible for mods (advanced management / allow mods), then run `instalar.bat`.
+
+**Update:** run the new `instalar.bat`; your settings are kept. **Uninstall:** run `desinstalar.bat`.
+
+**Something wrong?** Close the game, run **`coletar-logs.bat`** and attach the ZIP it creates on your Desktop to an issue.
+
+**Settings:** the **VR** tab in the game's *Options* menu (infinite health/ammo, infinite grenades (beta), snap turn angle, pistol aim assist, unstuck).
+
+**Known limitations:** grenades (BETA), some parkour obstacles, item icons on the belt pouches, sword hits on some new bosses/creatures, and Game Pass support (experimental).
