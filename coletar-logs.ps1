@@ -45,9 +45,24 @@ foreach ($d in (Get-ChildItem (Join-Path $vr 'dados\UnrealVRMod') -Directory -Er
     Grab (Join-Path $d.FullName 'plugins\opcoes-vr.txt') "mod-$($d.Name)-opcoes-vr.txt"
 }
 # registro do proprio jogo e configuracao grafica
-$saved = Join-Path $env:LOCALAPPDATA 'ValorMortis\Saved'
-Grab (Join-Path $saved 'Logs\ValorMortis.log') 'jogo-ValorMortis.log' 3MB
-foreach ($w in 'Windows', 'WinGDK') { Grab (Join-Path $saved "Config\$w\GameUserSettings.ini") "jogo-$w-GameUserSettings.ini" }
+$saveds = @(Join-Path $env:LOCALAPPDATA 'ValorMortis\Saved')
+# Game Pass: o jogo grava na pasta virtual do pacote (Packages\...\LocalCache\Local\ValorMortis\Saved)
+foreach ($pk in (Get-ChildItem (Join-Path $env:LOCALAPPDATA 'Packages') -Directory -Filter '*ValorMortis*' -ErrorAction SilentlyContinue)) {
+    $saveds += (Join-Path $pk.FullName 'LocalCache\Local\ValorMortis\Saved')
+}
+$k = 0
+foreach ($saved in $saveds) {
+    if (-not (Test-Path $saved)) { continue }
+    $tag = if ($k -eq 0) { 'jogo' } else { "jogo$k" }
+    $k++
+    Grab (Join-Path $saved 'Logs\ValorMortis.log') "$tag-ValorMortis.log" 3MB
+    foreach ($ini in (Get-ChildItem (Join-Path $saved 'Config') -Recurse -Filter '*.ini' -ErrorAction SilentlyContinue | Where-Object { $_.Name -in 'GameUserSettings.ini', 'Engine.ini', 'Scalability.ini' })) {
+        Grab $ini.FullName "$tag-$($ini.Directory.Name)-$($ini.Name)"
+    }
+    Add-Content (Join-Path $tmp 'pasta-do-jogo.txt') "Saved ($tag): $saved" -Encoding utf8 -ErrorAction SilentlyContinue
+}
+# placa de video
+try { Get-CimInstance Win32_VideoController | Select-Object Name, DriverVersion, AdapterRAM | Format-List | Out-String | Set-Content (Join-Path $tmp 'placa-de-video.txt') -Encoding utf8 } catch {}
 # arquivos da pasta do jogo (nomes e tamanhos)
 Get-ChildItem $bin -File -ErrorAction SilentlyContinue | Select-Object Name, Length, LastWriteTime | Format-Table -AutoSize | Out-String |
     Set-Content (Join-Path $tmp 'pasta-do-jogo.txt') -Encoding utf8

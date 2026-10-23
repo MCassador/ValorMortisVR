@@ -1,0 +1,11 @@
+giro=30
+mira=4.0
+imagem=0
+braco=59.0
+vida=0
+olhos5=6
+img_reflexos=3
+img_sombras=1
+img_nitidez=0.00
+img_posfx=1
+granadas=0

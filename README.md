@@ -2,7 +2,7 @@
 
 Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços do personagem seguindo os seus controles. É um mod de fã, feito sobre o [UEVR](https://github.com/praydog/UEVR) (praydog, licença MIT). **Não é oficial e este repositório não contém o jogo.**
 
-> Versão 0.3.1, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
+> Versão 0.4, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
 
 ## O que o mod faz
 
@@ -13,6 +13,21 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 - **Câmera:** ajustada nos golpes especiais e finalizações; nas cenas do jogo o mod sai da frente e mostra a câmera original.
 - **Corpo e braços:** os dois braços acompanham os controles, e o empurrão do golpe vira reação do inimigo.
 - **Aba VR no menu do jogo:** em *Opções* há uma aba **VR** para ligar/desligar vida e balas infinitas, trocar o giro do analógico, ajustar a ajuda da mira e soltar o personagem se ele ficar preso.
+
+## Novidades da 0.4
+
+- **Esquiva e granadas não morrem mais:** o jogo achava que você tinha passado para teclado/mouse (ao mexer o mouse ou trocar de janela) e desligava os botões do controle (esquiva no grip direito, vagas de item). O mod agora devolve o jogo ao controle.
+- **Configuração testada aplicada na instalação:** gráficos do jogo (FSR, qualidade, brilho), configuração do UEVR e opções do mod iguais às do autor, uma vez por versão. A sua resolução e o modo da janela ficam; o que existia é guardado e o `desinstalar.bat` devolve os gráficos de antes. Para não aplicar: `instalar.bat -SemConfigDoAutor`.
+- **Granada (BETA):** dá para pegar com a **pistola na mão esquerda** (a pistola some e volta depois do arremesso); a mão segura a bomba na pose certa, sem a animação de arremesso do jogo, e a granada é presa na mão na hora em que nasce.
+- **Troca de arma:** a arma não voa mais das costas/coldre até a mão; aparece direto na mão.
+- **Mosquete:** a mão esquerda encosta no cano (antes às vezes ia por cima ou ficava fora) e não solta à toa; menos rastro/borrão na mão que se move.
+- **Espada grande (claymore):** a defesa liga com ela também (lâmina de 140 cm segurada mais longe).
+- **Caixotes e objetos quebráveis** quebram só com a espada (antes só depois do gatilho); os pedaços voam menos.
+- **Inimigos comuns** não colam mais no personagem (corpo do VR um pouco maior).
+- **Trava no inimigo:** a vista acompanha mais suave, sem tranco ao trocar de alvo.
+- **Imagem:** reflexos em níveis (`img_reflexos`: madeira e lama não brilham mais como molhadas, menos pontinhos e menos diferença entre os olhos); resolução do VR 0,9 e profundidade enviada ao óculos (mais FPS, menos distorção do quadro inventado). Efeitos de fogo colados no rosto (pegando fogo) escondidos.
+- **Núcleo do UEVR do fork joeyhodge (opcional, desligado):** `ValorMortisVR\nucleo-fork-LIGAR.bat` liga um núcleo mais novo com **2D**, **AFR**, **Native Stereo Fix** e correção da faixa preta ao virar a cabeça; `nucleo-fork-DESLIGAR.bat` volta ao normal. Com ele: deixe a janela do jogo na frente até o VR ligar e não minimize o jogo.
+- **Game Pass (experimental):** o mod passa a acompanhar os objetos do jogo mesmo quando o UEVR não consegue (era o que deixava o VR "solto" do corpo no Game Pass). `coletar-logs.bat` pega também os gráficos e o registro do jogo do Game Pass.
 
 ## Novidades da 0.3.1
 
@@ -63,7 +78,7 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 
 ## Instalação
 
-1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.3.1.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
+1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.4.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
 2. **Feche o Valor Mortis.**
 3. Dê dois cliques em **`instalar.bat`**.
    - Ele procura o jogo sozinho nas bibliotecas da Steam e na pasta do app Xbox (Game Pass).
@@ -84,7 +99,7 @@ instalar.bat "D:\SteamLibrary\steamapps\common\Valor Mortis\ValorMortis\Binaries
 
 ## Atualizar
 
-Baixe a versão nova, extraia e rode o `instalar.bat` de novo. Os arquivos do mod são trocados, mas **os seus ajustes e calibrações são mantidos** (`opcoes-vr.txt`, pegadas da espada e da pistola, configuração do UEVR).
+Baixe a versão nova, extraia e rode o `instalar.bat` de novo. Os arquivos do mod são trocados e os seus ajustes ficam, **exceto quando a versão traz uma configuração do autor nova**: aí ela é aplicada uma vez (gráficos, UEVR e opções do mod), com cópia do que havia. Para manter tudo como está: `instalar.bat -SemConfigDoAutor`.
 
 ## Remover
 
@@ -100,7 +115,7 @@ Mapa atual (pode mudar entre versões):
 | Mão esquerda | pistola (gatilho esquerdo atira) |
 | Grip esquerdo | mirar com a pistola; com o mosquete, segurar o cano com as duas mãos |
 | Gatilho direito (mosquete) | mirar e atirar |
-| Grip esquerdo na cintura | pegar o item do bolso (granada: segure, aponte e solte para jogar) |
+| Grip esquerdo na cintura | pegar o item do bolso (granada: segure, aponte e solte para jogar; com a pistola, a mão bem embaixo, no cinto) |
 | Grip direito | esquiva |
 | Analógico direito para cima / baixo | pular / agachar |
 | A direito | recarregar |
@@ -118,9 +133,10 @@ O jeito mais fácil é a aba **VR** em *Opções* (no menu de pausa). Os valores
 |---|---|
 | `giro=40` | ângulo de cada passo do giro da vista (30, 40 ou 45 graus). No jogo: clique os **dois analógicos juntos** para trocar |
 | `mira=2.5` | cone da assistência de mira da pistola, em graus (0 desliga). No teclado: tecla **8** troca 2,5, 4 e desligada |
-| `vida=1` | vida e balas infinitas (1 liga, 0 desliga). No teclado: tecla **0** |
+| `vida=0` | vida e balas infinitas (1 liga, 0 desliga). No teclado: tecla **0** |
 | `granadas=0` | granadas infinitas (BETA; 1 liga). Também na aba VR |
-| `img_reflexos=0` | reflexos do Lumen (0 = desligados, mais leve; 1 = como o jogo) |
+| `img_reflexos=3` | reflexos do Lumen: 0 = desligados (mais leve, mas superfícies brilham como molhadas); 1 = como o jogo; 2 = só nas superfícies lisas; 3 = só no quase espelho, sem vidro e sem reflexo pela tela (padrão) |
+| `img_maos2=1` | 1 = menos rastro/borrão do FSR nos braços e armas do VR; 0 = desliga |
 | `img_posfx=1` | 1 = sem desfoque, reflexo de lente, aberração de cor, granulado e borrão (melhor no VR) |
 
 No Game Pass a pasta `ValorMortis-Win64-Shipping` tem o nome do executável do Game Pass.
@@ -146,6 +162,7 @@ Dentro de `...\Valor Mortis\ValorMortis\Binaries\Win64`:
 version.dll                      carregador (liga o VR com o jogo)
 ValorMortisVR\
   UEVRBackend.dll                núcleo do UEVR
+  nucleo-fork\                   núcleo do UEVR do fork joeyhodge (opcional; nucleo-fork-LIGAR.bat / -DESLIGAR.bat)
   openxr_loader.dll              OpenXR (Khronos)
   LuaVR.dll
   perfil\config.txt              perfil inicial do VR
@@ -155,6 +172,7 @@ ValorMortisVR\
 ## Créditos
 
 - [UEVR](https://github.com/praydog/UEVR), por praydog e colaboradores (MIT).
+- Núcleo opcional do fork [joeyhodge/UEVR](https://github.com/joeyhodge/UEVR) (branch ue57performance), usado sem alterações.
 - OpenXR loader, Khronos Group.
 - Mod por MCassador.
 
@@ -163,6 +181,21 @@ ValorMortisVR\
 ## English
 
 **Valor Mortis VR** lets you play *Valor Mortis* in virtual reality, in first person, with the character's arms following your controllers. Fan-made mod built on [UEVR](https://github.com/praydog/UEVR) (praydog, MIT). Not official; this repository does not contain the game.
+
+### What's new in 0.4
+
+- **Dodge and grenades no longer stop working:** the game thought you had switched to mouse/keyboard (after moving the mouse or switching windows) and turned off the gamepad buttons (dodge on the right grip, item slots). The mod now switches the game back to the gamepad.
+- **Tested settings applied on install:** the game's graphics (FSR, quality, brightness), UEVR settings and mod options match the author's, once per version. Your resolution and window mode are kept; previous files are backed up and `desinstalar.bat` restores your old graphics. To skip: `instalar.bat -SemConfigDoAutor`.
+- **Grenade (BETA):** you can grab one with the **pistol in your left hand** (the pistol hides and comes back after the throw); the hand holds the bomb properly, without the game's throw animation, and the grenade is caught in your hand as soon as it spawns.
+- **Weapon swap:** the weapon no longer flies from your back/holster to your hand; it just appears in your hand.
+- **Musket:** the left hand stays on the barrel (it sometimes went on top or floated off) and doesn't let go by itself; less FSR smearing on the moving hand.
+- **Big sword (claymore):** blocking works with it too.
+- **Crates and breakables** break with the sword alone (before, only after pulling the trigger); debris flies less far.
+- **Regular enemies** no longer press against you (slightly larger VR body).
+- **Target lock:** the view follows more smoothly, no jolt when switching targets.
+- **Image:** reflection levels (`img_reflexos`: wood and mud no longer look wet, fewer sparkles, less difference between eyes); VR resolution 0.9 and depth sent to the headset (more FPS, less reprojection warping). Fire effects stuck to your face (when burning) are hidden.
+- **Optional joeyhodge UEVR fork core (off by default):** `ValorMortisVR\nucleo-fork-LIGAR.bat` enables a newer core with **2D**, **AFR**, **Native Stereo Fix** and a fix for black edges when turning your head; `nucleo-fork-DESLIGAR.bat` goes back. With it, keep the game window in front until VR starts and don't minimize the game.
+- **Game Pass (experimental):** the mod now tracks game objects even when UEVR can't (the cause of the "controllers separate from the body" reports on Game Pass). `coletar-logs.bat` also collects the Game Pass game log and graphics settings.
 
 ### What's new in 0.3.1
 
@@ -190,7 +223,7 @@ ValorMortisVR\
 
 ### Install
 
-1. Download `ValorMortisVR-v0.3.1.zip` from **[Releases](../../releases)** and extract the whole folder.
+1. Download `ValorMortisVR-v0.4.zip` from **[Releases](../../releases)** and extract the whole folder.
 2. Close Valor Mortis.
 3. Double-click **`instalar.bat`**. It finds the game in your Steam libraries and in the Xbox app folder (Game Pass); if not, paste the folder that contains the game executable (Steam: `...\ValorMortis\Binaries\Win64`).
 4. Start your OpenXR runtime (SteamVR, Meta/Oculus, Virtual Desktop…) and launch the game. VR turns on by itself about 40 seconds later.

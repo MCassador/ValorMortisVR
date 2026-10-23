@@ -1,0 +1,2 @@
+﻿items.consumable.grenade.oil=/Game/Minotaur/Art/Props/Gameplay/Grenadier_Grenade/SM_Grenadier_Grenade.SM_Grenadier_Grenade|/Game/Minotaur/Art/Props/Gameplay/Grenadier_Grenade/M_Grenadier_Grenade.M_Grenadier_Grenade
+items.consumable.grenade.regular=/Game/Minotaur/Art/Props/Gameplay/Grenadier_Grenade/SM_Grenadier_Grenade.SM_Grenadier_Grenade|/Game/Minotaur/Art/Props/Gameplay/Grenadier_Grenade/M_Grenadier_Grenade.M_Grenadier_Grenade

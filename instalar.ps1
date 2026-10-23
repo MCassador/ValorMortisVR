@@ -1,8 +1,10 @@
-# Instala o Valor Mortis VR na pasta do jogo (Steam ou Xbox Game Pass). Chamado pelo instalar.bat.
+﻿# Instala o Valor Mortis VR na pasta do jogo (Steam ou Xbox Game Pass). Chamado pelo instalar.bat.
 # Uso: instalar.bat            -> acha o jogo sozinho (Steam e Game Pass)
 #      instalar.bat "D:\...\ValorMortis\Binaries\Win64"   -> pasta indicada por voce (a pasta do executavel do jogo)
 # Grava um relatorio (relatorio-instalacao.txt, ao lado deste arquivo) para mandar se algo der errado.
-param([string]$GameBin = '')
+#      instalar.bat -SemConfigDoAutor   -> nao mexe nos graficos do jogo nem nas opcoes (so instala/atualiza o mod)
+#      instalar.bat -ConfigDoAutor      -> aplica a configuracao do autor de novo (mesmo se ja foi aplicada)
+param([string]$GameBin = '', [switch]$SemConfigDoAutor, [switch]$ConfigDoAutor)
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $files = Join-Path $here 'arquivos'
@@ -137,6 +139,16 @@ try {
     Copy-Item (Join-Path $files 'ValorMortisVR\perfil\config.txt') (Join-Path $vr 'perfil\config.txt') -Force
     Copy-Item (Join-Path $files 'plugin\ValorMortisVR.dll') (Join-Path $plugins 'ValorMortisVR.dll') -Force
     Copy-Item (Join-Path $here 'coletar-logs.ps1') (Join-Path $vr 'coletar-logs.ps1') -Force -ErrorAction SilentlyContinue
+    # nucleo do fork joeyhodge/UEVR (opcional, desligado): ligar/desligar pelos .bat; a escolha (usar-nucleo-fork.txt) nao e mexida
+    $forkSrc = Join-Path $files 'ValorMortisVR\nucleo-fork'
+    if (Test-Path $forkSrc) {
+        New-Item -ItemType Directory -Force (Join-Path $vr 'nucleo-fork') | Out-Null
+        foreach ($f in Get-ChildItem $forkSrc -File) { Copy-Item $f.FullName (Join-Path $vr "nucleo-fork\$($f.Name)") -Force }
+        foreach ($f in 'nucleo-fork-LIGAR.bat', 'nucleo-fork-DESLIGAR.bat') {
+            $src = Join-Path $files "ValorMortisVR\$f"
+            if (Test-Path $src) { Copy-Item $src (Join-Path $vr $f) -Force }
+        }
+    }
 } catch {
     Fail "A copia falhou: $($_.Exception.Message)"
 }
@@ -146,6 +158,89 @@ $kept = 0; $added = 0
 foreach ($f in Get-ChildItem (Join-Path $files 'padroes') -File) {
     $dst = Join-Path $plugins $f.Name
     if (Test-Path $dst) { $kept++ } else { Copy-Item $f.FullName $dst; $added++ }
+}
+
+# Configuracao do autor (arquivos\config-do-autor): graficos do jogo (upscaler FSR, qualidade, brilho...), configuracao
+# do UEVR e opcoes/calibracao do mod iguais as do jogo de quem fez o mod (testado assim; outro upscaler ou o Stereo Fix
+# ligado estragam um olho). Aplicada uma vez por versao da configuracao (nao apaga ajustes a cada atualizacao); o que
+# existia vai para copias. Do jogo de quem instala ficam so a resolucao/janela/HDR do monitor e o teste de desempenho.
+$cfg = Join-Path $files 'config-do-autor'
+$cfgApplied = $false
+if ((Test-Path $cfg) -and -not $SemConfigDoAutor) {
+    $cfgHash = ((Get-ChildItem $cfg -Recurse -File | Sort-Object FullName | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join '')
+    $cfgHash = [BitConverter]::ToString([Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::ASCII.GetBytes($cfgHash))).Replace('-', '').Substring(0, 16)
+    $stateDir = Join-Path $env:LOCALAPPDATA 'ValorMortisVR'
+    New-Item -ItemType Directory -Force $stateDir | Out-Null
+    $stampFile = Join-Path $stateDir 'config-do-autor-aplicada.txt'
+    $last = if (Test-Path $stampFile) { (Get-Content $stampFile -Raw).Trim() } else { '' }
+    if ($ConfigDoAutor -or $last -ne $cfgHash) {
+        $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+        $bak = Join-Path $vr "copias-antes-config-do-autor\$stamp"
+        New-Item -ItemType Directory -Force $bak | Out-Null
+
+        # 1) graficos do jogo (GameUserSettings.ini): Steam em %LOCALAPPDATA%\ValorMortis\Saved; Game Pass na pasta do pacote
+        $saveds = @(Join-Path $env:LOCALAPPDATA 'ValorMortis\Saved')
+        foreach ($pk in (Get-ChildItem (Join-Path $env:LOCALAPPDATA 'Packages') -Directory -Filter '*ValorMortis*' -ErrorAction SilentlyContinue)) {
+            $saveds += (Join-Path $pk.FullName 'LocalCache\Local\ValorMortis\Saved')
+        }
+        $targets = @()
+        foreach ($s in $saveds) {
+            $targets += @(Get-ChildItem (Join-Path $s 'Config') -Recurse -Filter 'GameUserSettings.ini' -File -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName })
+        }
+        if (-not $targets) {
+            # jogo nunca aberto: cria onde ele vai ler
+            $targets += (Join-Path $saveds[0] 'Config\Windows\GameUserSettings.ini')
+            if ($store -ne 'Steam') { foreach ($s in $saveds | Select-Object -Skip 1) { $targets += (Join-Path $s 'Config\Windows\GameUserSettings.ini') } }
+        }
+        $keep = 'ResolutionSizeX', 'ResolutionSizeY', 'LastUserConfirmedResolutionSizeX', 'LastUserConfirmedResolutionSizeY', 'FullscreenMode',
+            'LastConfirmedFullscreenMode', 'PreferredFullscreenMode', 'DesiredScreenWidth', 'DesiredScreenHeight', 'LastUserConfirmedDesiredScreenWidth',
+            'LastUserConfirmedDesiredScreenHeight', 'LastRecommendedScreenWidth', 'LastRecommendedScreenHeight', 'LastCPUBenchmarkResult',
+            'LastGPUBenchmarkResult', 'LastCPUBenchmarkSteps', 'LastGPUBenchmarkSteps', 'LastGPUBenchmarkMultiplier', 'bUseHDRDisplayOutput', 'HDRDisplayOutputNits'
+        $author = Get-Content (Join-Path $cfg 'jogo\GameUserSettings.ini')
+        $restoreList = Join-Path $stateDir 'graficos-antes-do-mod.txt'
+        foreach ($t in $targets) {
+            $mine = @()
+            if (Test-Path $t) {
+                $mine = @(Get-Content $t | Where-Object { $_ -match '^([^=;\[]+)=' -and $keep -contains $Matches[1] })
+                $b = "$t.antes-valormortisvr-$stamp"
+                Copy-Item $t $b
+                # a copia mais antiga (antes do mod mexer pela primeira vez) e a que o desinstalador devolve
+                if (-not ((Test-Path $restoreList) -and (Select-String -Path $restoreList -SimpleMatch "$t|" -Quiet))) { Add-Content $restoreList "$t|$b" -Encoding utf8 }
+            }
+            $out = New-Object System.Collections.Generic.List[string]
+            $inserted = $false
+            foreach ($line in $author) {
+                if ($line -match '^([^=;\[]+)=' -and $keep -contains $Matches[1] -and $mine.Count) {
+                    if (-not $inserted) { foreach ($m in $mine) { $out.Add($m) }; $inserted = $true }
+                    continue
+                }
+                $out.Add($line)
+            }
+            New-Item -ItemType Directory -Force (Split-Path $t -Parent) | Out-Null
+            [IO.File]::WriteAllLines($t, $out, (New-Object Text.UTF8Encoding($false)))
+            Note "config do autor: graficos do jogo em $t (resolucao/janela $(if ($mine.Count) { 'mantidas' } else { 'do autor' }))"
+        }
+
+        # 2) UEVR (config.txt/cameras.txt do perfil: Stereo Fix desligado, camera, mira...)
+        $uevrDir = Join-Path $vr "dados\UnrealVRMod\$stem"
+        New-Item -ItemType Directory -Force $uevrDir | Out-Null
+        foreach ($f in (Get-ChildItem (Join-Path $cfg 'uevr') -File -ErrorAction SilentlyContinue)) {
+            $dst = Join-Path $uevrDir $f.Name
+            if (Test-Path $dst) { Copy-Item $dst (Join-Path $bak "uevr-$($f.Name)") }
+            Copy-Item $f.FullName $dst -Force
+        }
+        # 3) opcoes do menu VR e calibracao do mod
+        foreach ($f in (Get-ChildItem (Join-Path $cfg 'mod') -File -ErrorAction SilentlyContinue)) {
+            $dst = Join-Path $plugins $f.Name
+            if (Test-Path $dst) { Copy-Item $dst (Join-Path $bak "mod-$($f.Name)") }
+            Copy-Item $f.FullName $dst -Force
+        }
+        Set-Content $stampFile $cfgHash -Encoding ascii
+        Note "config do autor aplicada ($cfgHash); copias do que existia em $bak"
+        $cfgApplied = $true
+    } else {
+        Note "config do autor: ja aplicada antes ($cfgHash), mantidos os ajustes atuais"
+    }
 }
 
 # Confere o que foi copiado
@@ -167,6 +262,10 @@ Note "Instalado ok ($added ajustes novos, $kept mantidos)"
 Write-Host ''
 if ($update) { Write-Host 'Valor Mortis VR ATUALIZADO.' -ForegroundColor Green } else { Write-Host 'Valor Mortis VR INSTALADO.' -ForegroundColor Green }
 Write-Host "Ajustes: $added novos, $kept mantidos (os seus)."
+if ($cfgApplied) {
+    Write-Host 'Configuracao do autor aplicada: graficos do jogo (FSR, qualidade), UEVR e opcoes do mod iguais as testadas.' -ForegroundColor Green
+    Write-Host '  (a sua resolucao/janela foi mantida; copias do que havia antes ficaram guardadas)'
+}
 Write-Host ''
 if ($store -eq 'Steam') { Write-Host 'Agora: ligue o headset (SteamVR, Oculus/Meta ou Virtual Desktop com OpenXR) e abra o jogo pela Steam.' }
 else { Write-Host 'Agora: ligue o headset (SteamVR, Oculus/Meta ou Virtual Desktop com OpenXR) e abra o jogo pelo app Xbox.' }

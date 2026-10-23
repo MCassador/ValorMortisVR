@@ -44,4 +44,14 @@ Remove-Item (Join-Path $bin 'version.dll') -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $bin 'ValorMortisVR') -Recurse -Force -ErrorAction SilentlyContinue
 $old = Join-Path $bin 'version.dll.antes-valormortisvr'
 if (Test-Path $old) { Move-Item $old (Join-Path $bin 'version.dll') -Force; Write-Host 'O version.dll que existia antes foi devolvido.' }
+# graficos do jogo como estavam antes da configuracao do autor (o instalador guardou a primeira copia)
+$restoreList = Join-Path $env:LOCALAPPDATA 'ValorMortisVR\graficos-antes-do-mod.txt'
+if (Test-Path $restoreList) {
+    foreach ($l in (Get-Content $restoreList)) {
+        $p = $l.Split('|')
+        if ($p.Count -eq 2 -and (Test-Path $p[1])) { Copy-Item $p[1] $p[0] -Force; Write-Host "Graficos do jogo devolvidos: $($p[0])" }
+    }
+    Remove-Item $restoreList -Force -ErrorAction SilentlyContinue
+}
+Remove-Item (Join-Path $env:LOCALAPPDATA 'ValorMortisVR\config-do-autor-aplicada.txt') -Force -ErrorAction SilentlyContinue
 Write-Host 'Valor Mortis VR removido.' -ForegroundColor Green
