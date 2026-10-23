@@ -166,8 +166,19 @@ foreach ($f in Get-ChildItem (Join-Path $files 'padroes') -File) {
 # existia vai para copias. Do jogo de quem instala ficam so a resolucao/janela/HDR do monitor e o teste de desempenho.
 $cfg = Join-Path $files 'config-do-autor'
 $cfgApplied = $false
+# Placa de video (23/10: Game Pass com NVIDIA RTX 4070 SUPER: com o FSR da config do autor - placa AMD, FSR 4 - o Native
+# Stereo normal mostrava so o olho esquerdo). So na AMD o upscaler do autor e aplicado; nas outras fica o upscaler que a
+# pessoa tinha antes do mod (copia mais antiga) ou, sem copia, o jogo escolhe o padrao dele para a placa.
+$gpuNames = @()
+try { $gpuNames = @(Get-CimInstance Win32_VideoController -ErrorAction Stop | ForEach-Object { $_.Name }) } catch {}
+$vendor = if ($gpuNames -match 'NVIDIA|GeForce|RTX|GTX') { 'nvidia' } elseif ($gpuNames -match 'Radeon') { 'amd' } elseif ($gpuNames -match 'Intel') { 'intel' } else { 'outra' }
+Note "placa de video: $vendor ($($gpuNames -join '; '))"
+$upKeys = 'UpscalerIndex', 'bUpscalerSetByUser', 'bUpscalerDefaultsApplied', 'ResolutionScale', 'UpscalerResolutionScale', 'ActiveFrameGen', 'PendingFrameGen',
+    'bDLSSEnabled', 'DLSSMode', 'DLSSFGMode', 'DLSSReflexMode', 'bFSREnabled', 'FSRMode', 'bFSRFGEnabled', 'bXeSSEnabled', 'bXeSSFGEnabled', 'XeSSMode',
+    'XeLLModeEnabled', 'bAntiLag2Enabled'
 if ((Test-Path $cfg) -and -not $SemConfigDoAutor) {
-    $cfgHash = ((Get-ChildItem $cfg -Recurse -File | Sort-Object FullName | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join '')
+    # versao 2 da regra (placa de video) e a marca da placa entram na marca: quem ja tinha recebido a config recebe de novo, 1 vez
+    $cfgHash = (((Get-ChildItem $cfg -Recurse -File | Sort-Object FullName | ForEach-Object { (Get-FileHash $_.FullName).Hash }) -join '') + "|cfg2|$vendor")
     $cfgHash = [BitConverter]::ToString([Security.Cryptography.SHA256]::Create().ComputeHash([Text.Encoding]::ASCII.GetBytes($cfgHash))).Replace('-', '').Substring(0, 16)
     $stateDir = Join-Path $env:LOCALAPPDATA 'ValorMortisVR'
     New-Item -ItemType Directory -Force $stateDir | Out-Null
@@ -207,18 +218,41 @@ if ((Test-Path $cfg) -and -not $SemConfigDoAutor) {
                 # a copia mais antiga (antes do mod mexer pela primeira vez) e a que o desinstalador devolve
                 if (-not ((Test-Path $restoreList) -and (Select-String -Path $restoreList -SimpleMatch "$t|" -Quiet))) { Add-Content $restoreList "$t|$b" -Encoding utf8 }
             }
+            # placa que nao e AMD: upscaler de antes do mod (ou o padrao do jogo para a placa)
+            $up = @()
+            $upFrom = ''
+            if ($vendor -ne 'amd') {
+                $orig = $null
+                if (Test-Path $restoreList) {
+                    $hit = Get-Content $restoreList | Where-Object { $_.StartsWith("$t|") } | Select-Object -First 1
+                    if ($hit) { $orig = $hit.Substring($t.Length + 1) }
+                }
+                if ($orig -and (Test-Path $orig)) {
+                    $up = @(Get-Content $orig | Where-Object { $_ -match '^([^=;\[]+)=' -and $upKeys -contains $Matches[1] })
+                    if ($up.Count) { $upFrom = 'o de antes do mod' }
+                }
+                if (-not $up.Count) {
+                    $up = @('bUpscalerSetByUser=False', 'bUpscalerDefaultsApplied=False')
+                    $upFrom = 'o padrao do jogo para a placa'
+                }
+            }
             $out = New-Object System.Collections.Generic.List[string]
             $inserted = $false
+            $upInserted = $false
             foreach ($line in $author) {
                 if ($line -match '^([^=;\[]+)=' -and $keep -contains $Matches[1] -and $mine.Count) {
                     if (-not $inserted) { foreach ($m in $mine) { $out.Add($m) }; $inserted = $true }
+                    continue
+                }
+                if ($up.Count -and $line -match '^([^=;\[]+)=' -and $upKeys -contains $Matches[1]) {
+                    if (-not $upInserted) { foreach ($u in $up) { $out.Add($u) }; $upInserted = $true }
                     continue
                 }
                 $out.Add($line)
             }
             New-Item -ItemType Directory -Force (Split-Path $t -Parent) | Out-Null
             [IO.File]::WriteAllLines($t, $out, (New-Object Text.UTF8Encoding($false)))
-            Note "config do autor: graficos do jogo em $t (resolucao/janela $(if ($mine.Count) { 'mantidas' } else { 'do autor' }))"
+            Note "config do autor: graficos do jogo em $t (resolucao/janela $(if ($mine.Count) { 'mantidas' } else { 'do autor' }); upscaler $(if ($up.Count) { $upFrom } else { 'do autor (FSR, placa AMD)' }))"
         }
 
         # 2) UEVR (config.txt/cameras.txt do perfil: Stereo Fix desligado, camera, mira...)
@@ -241,6 +275,23 @@ if ((Test-Path $cfg) -and -not $SemConfigDoAutor) {
     } else {
         Note "config do autor: ja aplicada antes ($cfgHash), mantidos os ajustes atuais"
     }
+}
+
+# Game Pass: so o nucleo do fork + Native Stereo Fix mostram os dois olhos (testador, 23/10: com o nucleo normal ou sem o
+# Stereo Fix, so o olho esquerdo). Ligados aqui a cada instalacao no Game Pass; na Steam nada muda.
+$gamePass = $exeName -ne 'ValorMortis-Win64-Shipping.exe'
+if ($gamePass -and (Test-Path (Join-Path $vr 'nucleo-fork\UEVRBackend.dll'))) {
+    Set-Content (Join-Path $vr 'usar-nucleo-fork.txt') 'Game Pass: nucleo do fork ligado pelo instalador (nucleo-fork-DESLIGAR.bat desliga)' -Encoding ascii
+    $ucfg = Join-Path $vr "dados\UnrealVRMod\$stem\config.txt"
+    if (-not (Test-Path $ucfg)) {
+        New-Item -ItemType Directory -Force (Split-Path $ucfg -Parent) | Out-Null
+        Copy-Item (Join-Path $vr 'perfil\config.txt') $ucfg -Force
+    }
+    $lines = Get-Content $ucfg | ForEach-Object { $_ -replace '^VR_NativeStereoFix=.*', 'VR_NativeStereoFix=true' -replace '^VR_RenderingMethod=.*', 'VR_RenderingMethod=0' }
+    if (-not ($lines -match '^VR_NativeStereoFix=')) { $lines += 'VR_NativeStereoFix=true' }
+    [IO.File]::WriteAllLines($ucfg, [string[]]$lines, (New-Object Text.UTF8Encoding($false)))
+    Note 'Game Pass: nucleo do fork e Native Stereo Fix ligados (dois olhos)'
+    Write-Host 'Game Pass: nucleo do fork e Native Stereo Fix ligados (necessarios para os dois olhos no Game Pass).' -ForegroundColor Yellow
 }
 
 # Confere o que foi copiado

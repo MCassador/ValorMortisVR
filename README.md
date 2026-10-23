@@ -2,7 +2,7 @@
 
 Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços do personagem seguindo os seus controles. É um mod de fã, feito sobre o [UEVR](https://github.com/praydog/UEVR) (praydog, licença MIT). **Não é oficial e este repositório não contém o jogo.**
 
-> Versão 0.4, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
+> Versão 0.4.1, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
 
 ## O que o mod faz
 
@@ -13,6 +13,14 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 - **Câmera:** ajustada nos golpes especiais e finalizações; nas cenas do jogo o mod sai da frente e mostra a câmera original.
 - **Corpo e braços:** os dois braços acompanham os controles, e o empurrão do golpe vira reação do inimigo.
 - **Aba VR no menu do jogo:** em *Opções* há uma aba **VR** para ligar/desligar vida e balas infinitas, trocar o giro do analógico, ajustar a ajuda da mira e soltar o personagem se ele ficar preso.
+
+## Novidades da 0.4.1
+
+- **Game Pass:** o instalador já liga o núcleo do fork e o **Native Stereo Fix** (no Game Pass só assim aparecem os dois olhos), e o carregador espera o jogo terminar de carregar para ligar o VR (antes desistia se o jogo demorasse). Testado por jogadores do Game Pass: VR e controles de movimento funcionando.
+- **Placa de vídeo:** o instalador identifica a placa. Na AMD aplica o FSR do autor; na NVIDIA (e outras) mantém o upscaler que você usava antes do mod, ou deixa o jogo escolher (normalmente o DLSS).
+- **Mosquete:** a textura da mão esquerda não fica mais "arrastando" quando ela se mexe com a arma nas duas mãos.
+- **Aba VR:** nova linha **"Menos rastro nas mãos (com contorno)"**, desligada por padrão (ligada, tira o rastro nos braços, mas o jogo desenha um contorno brilhante em volta deles).
+- **Braços** calculados uma vez por quadro com o núcleo do fork (mais leve).
 
 ## Novidades da 0.4
 
@@ -78,7 +86,7 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 
 ## Instalação
 
-1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.4.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
+1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.4.1.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
 2. **Feche o Valor Mortis.**
 3. Dê dois cliques em **`instalar.bat`**.
    - Ele procura o jogo sozinho nas bibliotecas da Steam e na pasta do app Xbox (Game Pass).
@@ -87,7 +95,7 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 
 ### Xbox Game Pass (experimental)
 
-No app Xbox, deixe a pasta do jogo acessível para mods (opções do Valor Mortis > gerenciar > gerenciamento avançado / permitir mods) e rode o `instalar.bat`. O executável do Game Pass é diferente do da Steam; o mod procura sozinho o que precisa ao abrir o jogo. Se não funcionar, rode `coletar-logs.bat` e mande o ZIP.
+No app Xbox, deixe a pasta do jogo acessível para mods (opções do Valor Mortis > gerenciar > gerenciamento avançado / permitir mods) e rode o `instalar.bat`. O instalador já liga o núcleo do fork e o Native Stereo Fix. O jogo pode levar alguns minutos para carregar; o VR liga uns 40 segundos depois — não feche. O executável do Game Pass é diferente do da Steam; o mod procura sozinho o que precisa ao abrir o jogo. Se não funcionar, rode `coletar-logs.bat` e mande o ZIP.
 
 Se ainda não usou o OpenXR com outro jogo, defina primeiro o seu runtime como o OpenXR ativo (no SteamVR, Meta ou Virtual Desktop).
 
@@ -127,7 +135,7 @@ Mapa atual (pode mudar entre versões):
 
 ## Ajustes
 
-O jeito mais fácil é a aba **VR** em *Opções* (no menu de pausa). Os valores ficam salvos em `ValorMortisVR\dados\UnrealVRMod\ValorMortis-Win64-Shipping\plugins\opcoes-vr.txt`:
+O jeito mais fácil é a aba **VR** em *Opções* (no menu de pausa): vida e balas infinitas, giro, ajuda na mira, granadas infinitas, menos rastro nas mãos e desprender. Os valores ficam salvos em `ValorMortisVR\dados\UnrealVRMod\ValorMortis-Win64-Shipping\plugins\opcoes-vr.txt`:
 
 | Linha | O que muda |
 |---|---|
@@ -136,7 +144,7 @@ O jeito mais fácil é a aba **VR** em *Opções* (no menu de pausa). Os valores
 | `vida=0` | vida e balas infinitas (1 liga, 0 desliga). No teclado: tecla **0** |
 | `granadas=0` | granadas infinitas (BETA; 1 liga). Também na aba VR |
 | `img_reflexos=3` | reflexos do Lumen: 0 = desligados (mais leve, mas superfícies brilham como molhadas); 1 = como o jogo; 2 = só nas superfícies lisas; 3 = só no quase espelho, sem vidro e sem reflexo pela tela (padrão) |
-| `img_maos2=1` | 1 = menos rastro/borrão do FSR nos braços e armas do VR; 0 = desliga |
+| `img_maos2=0` | 1 = menos rastro/borrão do FSR nos braços e armas do VR, mas o jogo desenha um contorno brilhante em volta deles; 0 = desligado (padrão). Também na aba VR |
 | `img_posfx=1` | 1 = sem desfoque, reflexo de lente, aberração de cor, granulado e borrão (melhor no VR) |
 
 No Game Pass a pasta `ValorMortis-Win64-Shipping` tem o nome do executável do Game Pass.
@@ -182,6 +190,14 @@ ValorMortisVR\
 
 **Valor Mortis VR** lets you play *Valor Mortis* in virtual reality, in first person, with the character's arms following your controllers. Fan-made mod built on [UEVR](https://github.com/praydog/UEVR) (praydog, MIT). Not official; this repository does not contain the game.
 
+### What's new in 0.4.1
+
+- **Game Pass:** the installer turns on the fork core and **Native Stereo Fix** (on Game Pass that's the only way to get both eyes), and the loader waits for the game to finish loading before starting VR (before, it gave up if the game took long). Tested by Game Pass players: VR and motion controls working.
+- **Graphics card:** the installer detects your GPU. On AMD it applies the author's FSR settings; on NVIDIA (and others) it keeps the upscaler you had before the mod, or lets the game choose (usually DLSS).
+- **Musket:** the left hand's texture no longer smears when you move it with the gun in both hands.
+- **VR tab:** new **"Less smearing on hands (with outline)"** row, off by default (on: removes smearing on the arms, but the game draws a glowing outline around them).
+- **Arms** computed once per frame with the fork core (lighter).
+
 ### What's new in 0.4
 
 - **Dodge and grenades no longer stop working:** the game thought you had switched to mouse/keyboard (after moving the mouse or switching windows) and turned off the gamepad buttons (dodge on the right grip, item slots). The mod now switches the game back to the gamepad.
@@ -223,12 +239,12 @@ ValorMortisVR\
 
 ### Install
 
-1. Download `ValorMortisVR-v0.4.zip` from **[Releases](../../releases)** and extract the whole folder.
+1. Download `ValorMortisVR-v0.4.1.zip` from **[Releases](../../releases)** and extract the whole folder.
 2. Close Valor Mortis.
 3. Double-click **`instalar.bat`**. It finds the game in your Steam libraries and in the Xbox app folder (Game Pass); if not, paste the folder that contains the game executable (Steam: `...\ValorMortis\Binaries\Win64`).
 4. Start your OpenXR runtime (SteamVR, Meta/Oculus, Virtual Desktop…) and launch the game. VR turns on by itself about 40 seconds later.
 
-**Game Pass (experimental):** in the Xbox app, make the game folder accessible for mods (advanced management / allow mods), then run `instalar.bat`.
+**Game Pass (experimental):** in the Xbox app, make the game folder accessible for mods (advanced management / allow mods), then run `instalar.bat`. The installer enables the fork core and Native Stereo Fix for you. The game can take a few minutes to load; VR starts about 40 seconds after it finishes — don't close it.
 
 **Update:** run the new `instalar.bat`; your settings are kept. **Uninstall:** run `desinstalar.bat`.
 
