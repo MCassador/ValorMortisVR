@@ -2,7 +2,7 @@
 
 Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços do personagem seguindo os seus controles. É um mod de fã, feito sobre o [UEVR](https://github.com/praydog/UEVR) (praydog, licença MIT). **Não é oficial e este repositório não contém o jogo.**
 
-> Versão 0.4.1, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
+> Versão 0.4.2, em desenvolvimento. Há partes ainda não testadas a fundo (veja [Limitações](#limitações)). **English below** ([English](#english)).
 
 ## O que o mod faz
 
@@ -12,7 +12,18 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 - **Granada na cintura**, frasco de cura e trava de mira no inimigo.
 - **Câmera:** ajustada nos golpes especiais e finalizações; nas cenas do jogo o mod sai da frente e mostra a câmera original.
 - **Corpo e braços:** os dois braços acompanham os controles, e o empurrão do golpe vira reação do inimigo.
-- **Aba VR no menu do jogo:** em *Opções* há uma aba **VR** para ligar/desligar vida e balas infinitas, trocar o giro do analógico, ajustar a ajuda da mira e soltar o personagem se ele ficar preso.
+- **Menu VR na pausa:** no menu de pausa, logo abaixo de *Opções*, o botão **VR** abre as opções do mod: vida e balas infinitas, giro do analógico (passos ou suave), ajuda da mira, granadas infinitas, luz, ajuda no aparo e soltar o personagem se ele ficar preso.
+
+## Novidades da 0.4.2
+
+- **Menu VR no menu de pausa:** botão **VR** logo abaixo de *Opções* (a aba dentro de Opções sumia ao reabrir o menu). Os textos seguem o idioma do jogo (português ou inglês).
+- **Combate de espada:** a força do golpe pesa. Golpe **leve** tira metade da vida e não atordoa; **médio** é o normal; **forte** (golpe amplo e rápido) tira 1,6x, atordoa forte e o inimigo **recua**. Encostar a lâmina devagar não conta mais como golpe (só vibra). Mais impacto: o corpo do inimigo balança mais onde a espada bateu.
+- **Ajuda no aparo:** nova opção no menu VR. Ligada (padrão), o mod reaperta o bloqueio na hora certa e o aparo perfeito fica fácil; desligada, o tempo do aparo é seu.
+- **Giro suave com 3 velocidades:** o giro do analógico direito passa por 30°, 40°, 45° e suave a 100, 150 ou 200 °/s.
+- **Luz:** nova opção no menu VR para a luz forte demais (pôr do sol, partes claras): *como o jogo*, *suave*, *mais suave* e *exposição fixa*.
+- **Trava de mira:** ao matar o inimigo travado, a trava solta sozinha (antes ficava presa no corpo e a frente virava trás).
+- **Cenas:** com a câmera da cena na frente do personagem, a cena aparece como o jogo filmou (antes a vista ficava virada para trás).
+- **Game Pass:** os dois olhos aparecem certos ao entrar na fase, sem precisar trocar o modo de imagem.
 
 ## Novidades da 0.4.1
 
@@ -72,8 +83,8 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 - Escadas não derrubam mais o personagem.
 - Câmera mais estável (menos tremida quando o jogo fica pesado).
 - Braços no tamanho certo (fixo).
-- Vida e balas infinitas (ligadas por padrão; desligue na aba VR).
-- Desprender o personagem preso ou embaixo do mapa (aba VR ou tecla **5**).
+- Vida e balas infinitas (ligue ou desligue no menu VR da pausa).
+- Desprender o personagem preso ou embaixo do mapa (menu VR da pausa ou tecla **5**).
 
 ## Requisitos
 
@@ -86,7 +97,7 @@ Joga **Valor Mortis** em realidade virtual, em primeira pessoa, com os braços d
 
 ## Instalação
 
-1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.4.1.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
+1. Em **[Releases](../../releases)** baixe o `ValorMortisVR-v0.4.2.zip` e **extraia a pasta inteira** (não rode de dentro do ZIP).
 2. **Feche o Valor Mortis.**
 3. Dê dois cliques em **`instalar.bat`**.
    - Ele procura o jogo sozinho nas bibliotecas da Steam e na pasta do app Xbox (Game Pass).
@@ -135,16 +146,19 @@ Mapa atual (pode mudar entre versões):
 
 ## Ajustes
 
-O jeito mais fácil é a aba **VR** em *Opções* (no menu de pausa): vida e balas infinitas, giro, ajuda na mira, granadas infinitas, menos rastro nas mãos e desprender. Os valores ficam salvos em `ValorMortisVR\dados\UnrealVRMod\ValorMortis-Win64-Shipping\plugins\opcoes-vr.txt`:
+O jeito mais fácil é o botão **VR** no menu de pausa (abaixo de *Opções*): vida e balas infinitas, giro, ajuda na mira, granadas infinitas, menos rastro nas mãos, luz, ajuda no aparo e desprender. Os valores ficam salvos em `ValorMortisVR\dados\UnrealVRMod\ValorMortis-Win64-Shipping\plugins\opcoes-vr.txt`:
 
 | Linha | O que muda |
 |---|---|
-| `giro=40` | ângulo de cada passo do giro da vista (30, 40 ou 45 graus). No jogo: clique os **dois analógicos juntos** para trocar |
+| `giro=40` | giro da vista no analógico direito: 30, 40 ou 45 graus por passo, ou **0 = suave** (contínuo). Também no menu VR; no jogo: clique os **dois analógicos juntos** para trocar |
+| `giro_vel=150` | velocidade do giro suave: 100, 150 ou 200 °/s |
+| `aparo=1` | ajuda no aparo (1 = o mod reaperta o bloqueio na hora certa; 0 = o tempo do aparo é seu). Também no menu VR |
+| `img_luz=0` | luz: 0 = como o jogo; 1 = suave; 2 = mais suave; 3 = exposição fixa. Também no menu VR |
 | `mira=2.5` | cone da assistência de mira da pistola, em graus (0 desliga). No teclado: tecla **8** troca 2,5, 4 e desligada |
 | `vida=0` | vida e balas infinitas (1 liga, 0 desliga). No teclado: tecla **0** |
-| `granadas=0` | granadas infinitas (BETA; 1 liga). Também na aba VR |
+| `granadas=0` | granadas infinitas (BETA; 1 liga). Também no menu VR |
 | `img_reflexos=3` | reflexos do Lumen: 0 = desligados (mais leve, mas superfícies brilham como molhadas); 1 = como o jogo; 2 = só nas superfícies lisas; 3 = só no quase espelho, sem vidro e sem reflexo pela tela (padrão) |
-| `img_maos2=0` | 1 = menos rastro/borrão do FSR nos braços e armas do VR, mas o jogo desenha um contorno brilhante em volta deles; 0 = desligado (padrão). Também na aba VR |
+| `img_maos2=0` | 1 = menos rastro/borrão do FSR nos braços e armas do VR, mas o jogo desenha um contorno brilhante em volta deles; 0 = desligado (padrão). Também no menu VR |
 | `img_posfx=1` | 1 = sem desfoque, reflexo de lente, aberração de cor, granulado e borrão (melhor no VR) |
 
 No Game Pass a pasta `ValorMortis-Win64-Shipping` tem o nome do executável do Game Pass.
@@ -160,7 +174,7 @@ O menu do UEVR abre com a tecla **Insert** (no teclado do PC).
 
 ## Limitações
 
-Ainda em ajuste: **granadas (BETA)**, alguns obstáculos de parkour, ícones dos itens nos bolsos da cintura, golpes de espada em alguns chefes e criaturas novos, e o suporte ao **Game Pass** (experimental). Se o personagem ficar preso depois de uma viagem rápida, use *Desprender* na aba VR (ou a tecla **5**) e salve o jogo num lugar normal. Nada disso trava o jogo.
+Ainda em ajuste: **granadas (BETA)**, alguns obstáculos de parkour, ícones dos itens nos bolsos da cintura, golpes de espada em alguns chefes e criaturas novos, e o suporte ao **Game Pass** (experimental). Se o personagem ficar preso depois de uma viagem rápida, use *Desprender* no menu VR da pausa (ou a tecla **5**) e salve o jogo num lugar normal. Nada disso trava o jogo.
 
 ## O que é instalado
 
@@ -189,6 +203,17 @@ ValorMortisVR\
 ## English
 
 **Valor Mortis VR** lets you play *Valor Mortis* in virtual reality, in first person, with the character's arms following your controllers. Fan-made mod built on [UEVR](https://github.com/praydog/UEVR) (praydog, MIT). Not official; this repository does not contain the game.
+
+### What's new in 0.4.2
+
+- **VR menu in the pause menu:** a **VR** button right below *Options* (the tab inside Options disappeared when the menu was reopened). Text follows the game language (Portuguese or English).
+- **Sword combat:** swing strength matters. A **light** hit does half damage and doesn't stagger; **medium** is normal; **strong** (wide, fast swing) does 1.6x, staggers hard and knocks the enemy **back**. Slowly touching an enemy with the blade no longer counts as a hit (it only vibrates). More impact: the enemy's body reacts more where the sword hit.
+- **Parry assist:** new option in the VR menu. On (default), the mod re-presses block at the right moment so perfect parries are easy; off, parry timing is up to you.
+- **Smooth turn with 3 speeds:** the right stick turn cycles 30°, 40°, 45° and smooth at 100, 150 or 200 °/s.
+- **Lighting:** new VR menu option for harsh light (sunsets, bright areas): *game default*, *soft*, *softer* and *fixed exposure*.
+- **Target lock:** when the locked enemy dies, the lock is released (before it stayed on the body and forward turned into backward).
+- **Cutscenes:** when the scene camera is in front of the character, the scene shows as the game filmed it (before the view ended up facing backwards).
+- **Game Pass:** both eyes show correctly when a level loads, without switching the rendering mode.
 
 ### What's new in 0.4.1
 
@@ -239,7 +264,7 @@ ValorMortisVR\
 
 ### Install
 
-1. Download `ValorMortisVR-v0.4.1.zip` from **[Releases](../../releases)** and extract the whole folder.
+1. Download `ValorMortisVR-v0.4.2.zip` from **[Releases](../../releases)** and extract the whole folder.
 2. Close Valor Mortis.
 3. Double-click **`instalar.bat`**. It finds the game in your Steam libraries and in the Xbox app folder (Game Pass); if not, paste the folder that contains the game executable (Steam: `...\ValorMortis\Binaries\Win64`).
 4. Start your OpenXR runtime (SteamVR, Meta/Oculus, Virtual Desktop…) and launch the game. VR turns on by itself about 40 seconds later.
@@ -250,6 +275,6 @@ ValorMortisVR\
 
 **Something wrong?** Close the game, run **`coletar-logs.bat`** and attach the ZIP it creates on your Desktop to an issue.
 
-**Settings:** the **VR** tab in the game's *Options* menu (infinite health/ammo, infinite grenades (beta), snap turn angle, pistol aim assist, unstuck).
+**Settings:** the **VR** button in the pause menu, below *Options* (infinite health/ammo, infinite grenades (beta), snap or smooth turn, pistol aim assist, less hand smearing, lighting, parry assist, unstuck).
 
 **Known limitations:** grenades (BETA), some parkour obstacles, item icons on the belt pouches, sword hits on some new bosses/creatures, and Game Pass support (experimental).
